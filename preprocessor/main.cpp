@@ -14,11 +14,11 @@ using filesystem::path;
 const regex DOUBLE_QUOTES{ R"/(\s*#\s*include\s*"([^"]*)"\s*)/" };
 const regex ANGLE_BRSCKET{ R"/(\s*#\s*include\s*<([^>]*)>\s*)/" };
 
-path operator""_p(const char* data, std::size_t sz) { 
-    return path(data, data + sz); 
+path operator""_p(const char* data, std::size_t sz) {
+    return path(data, data + sz);
 }
 
-bool Preprocess(const path& file_path, const vector<path>& include_directories, istream& source, ostream& destination) {
+bool PreprocessHendler(const path& file_path, const vector<path>& include_directories, istream& source, ostream& destination) {
     string line = ""s;
     int line_number = 1;
 
@@ -58,7 +58,7 @@ bool Preprocess(const path& file_path, const vector<path>& include_directories, 
                 return false;
             }
 
-            if (!Preprocess(path_from_current, include_directories, input, destination)) {
+            if (!PreprocessHendler(path_from_current, include_directories, input, destination)) {
                 return false;
             }
         }
@@ -84,7 +84,7 @@ bool Preprocess(const path& in_file, const path& out_file, const vector<path>& i
         return false;
     }
 
-    return Preprocess(in_file, include_directories, input, output);
+    return PreprocessHendler(in_file, include_directories, input, output);
 }
 
 string GetFileContents(string file) {
